@@ -41,3 +41,12 @@ dependencies {
 test {
 	useJUnitPlatform()
 }
+
+tasks.jar {
+	enabled = false
+}
+tasks.bootJar {
+	enabled = true
+	archiveClassifier.set("boot")
+	mainClassName = "com.natuski.survey.SurveyApplication"
+}
