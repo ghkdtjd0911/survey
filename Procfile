@@ -1,1 +1,1 @@
-web: java -cp target/classes/:target/dependency/* com/natsuki/SurveyApplication
+web: java -Dserver.port=$PORT $JAVA_OPTS -jar build/libs/*.jar
