@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>アンケート調査システム</title>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+</head>
+<body>
+<nav class="navbar navbar-expand-md bg-dark navbar-dark">
+    <!-- Brand -->
+    <a class="navbar-brand" href="/system">アンケート調査システム</a>
+
+    <!-- Toggler/collapsibe Button -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navbar links -->
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/system}">アンケートリスト</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/system/logout}">ログアウト</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<br>
+<br>
+<div class = "container">
+    <div class = "row">
+        <div class ="col-lg-6 col-md-6 col-sm-6 container justify-content-center card">
+            <h1 class = "text-center">  新しい答案 </h1>
+            <div class = "card-body">
+                <form th:action="@{/system/{id}/questions/{qid}/answers/new
+                (id=${Survey.id},qid=${surveyQuestion.id})}" th:object = "${answer}" method="POST">
+                    <div class ="form-group">
+                        <h3 th:text = "${surveyQuestion.question}"></h3>
+                        <label> 答案内容 </label>
+                        <input
+                                type = "text"
+                                name = "Answer"
+                                th:field = "*{Answer}"
+                                class = "form-control"
+                                placeholder="答案内容を入力してください"
+                        />
+                    </div>
+
+                    <div class ="form-group">
+                        <label> 次の質問番号 </label>
+                        <input
+                                type = "text"
+                                name = "nextQid"
+                                th:field = "*{nextQid}"
+                                class = "form-control"
+                                placeholder="この答案に従う次の質問番号を入力してください"
+                        />
+                    </div>
+
+
+
+                    <div class = "box-footer">
+                        <button type="submit" class = "btn btn-primary">
+                            Submit
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

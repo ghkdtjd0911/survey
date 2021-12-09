@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title th:text ="${survey.surveyName}" >Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link th:href="@{/css/layout.css}" rel="stylesheet" type="text/css" media="all">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+</head>
+<body>
+<div class="container mt-5">
+    <div class="d-flex justify-content-center row">
+        <div class="col-md-10 col-lg-10">
+            <div class="border">
+                <form th:action="@{/survey/{id}
+                (id=${survey.id})}" th:object = "${responsePersonInfo}"
+                      method="POST">
+                <div class="question bg-white p-3 border-bottom">
+                    <div class="d-flex flex-row justify-content-between align-items-center mcq">
+                        <h4 th:text = "${survey.surveyName}">Survey Example</h4>
+                    </div>
+                </div>
+                <div class="question bg-white p-3 border-bottom">
+                    <div class="d-flex flex-row align-items-center question-title">
+
+                    </div>
+                    <div class="ans ml-2" >
+                        <h5 class="mt-1 ml-2">来店番号</h5>
+                        <input
+                                type = "text"
+                                name = "personId"
+                                th:field = "*{personId}"
+                                placeholder="来店番号入力"
+                        />
+                    </div>
+
+                    <div class="ans ml-2" >
+                        <h5 class="mt-1 ml-2">訪問年月日</h5>
+                        <input
+                                type = "text"
+                                name = "pw"
+                                th:field = "*{pw}"
+                                placeholder="訪問年月日入力"
+                        />
+                    </div>
+
+                    <div class="ans ml-2" >
+                        <h5 class="mt-1 ml-2">年齢</h5>
+                        <select>
+                            <option th:value = "15"
+                                    th:field ="*{age}">10代</option>
+                            <option th:value = "25"
+                                    th:field ="*{age}">20代</option>
+                            <option th:value = "35"
+                                    th:field ="*{age}">30代</option>
+                            <option th:value = "45"
+                                    th:field ="*{age}">40代</option>
+                            <option th:value = "55"
+                                    th:field ="*{age}">50代</option>
+                            <option th:value = "65"
+                                    th:field ="*{age}">60代</option>
+                            <option th:value = "75"
+                                    th:field ="*{age}">70代 以上</option>
+                        </select>
+                    </div>
+
+                    <div class="ans ml-2" >
+                        <h5 class="mt-1 ml-2">性別</h5>
+                        <input
+                                type = "radio"
+                                name = "sex"
+                                th:text = "男性"
+                                th:value = "male"
+                                th:field = "*{sex}"
+
+                        />
+                        <input
+                                type = "radio"
+                                name = "sex"
+                                th:text = "女性"
+                                th:value = "female"
+                                th:field = "*{sex}"
+
+                        />
+
+                        <input
+                                type = "radio"
+                                name = "sex"
+                                th:text = "その他"
+                                th:value = "others"
+                                th:field = "*{sex}"
+
+                        />
+                    </div>
+                </div>
+                <div class="d-flex flex-row justify-content-between align-items-center p-3 bg-white">
+                    <button class="btn btn-primary border-success align-items-center btn-success"
+                            type="submit">スタート
+                    </button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

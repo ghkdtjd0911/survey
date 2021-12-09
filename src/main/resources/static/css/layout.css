@@ -1,0 +1,62 @@
+body {
+    background-color: #eee
+}
+
+label.radio {
+    cursor: pointer
+}
+
+label.radio.span input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    visibility: hidden;
+    pointer-events: none
+}
+
+label.radio span {
+    padding: 4px 4px;
+    border: 1px solid black;
+    display: inline-block;
+    color: black;
+    text-align: center;
+    border-radius: 3px;
+    margin-top: 7px;
+    text-transform: uppercase
+}
+
+div.ans.ml-2{
+ margin-top: 15px;
+}
+
+
+input {
+    padding: 4px 4px;
+    border: 1px solid black;
+    display: inline-block;
+    color: black;
+    text-align: center;
+    align:left;
+    border-radius: 3px;
+    margin-top: 7px;
+}
+
+label.radio.span input:checked {
+    border-color: red;
+    background-color: red;
+    color: #fff
+}
+
+.ans {
+    margin-left: 36px !important
+}
+
+.btn:focus {
+    outline: 0 !important;
+    box-shadow: none !important
+}
+
+.btn:active {
+    outline: 0 !important;
+    box-shadow: none !important
+}

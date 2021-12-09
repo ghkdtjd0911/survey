@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link th:href="@{/css/layout.css}" rel="stylesheet" type="text/css" media="all">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+</head>
+<body>
+<div class="container mt-5">
+    <div class="d-flex justify-content-center row">
+        <div class="col-md-10 col-lg-10">
+            <div class="border">
+                <form th:action="@{/survey/{id}/{qid}/response?personId={personId}
+                (id=${survey.id},qid=${surveyQuestion.id},personId=${personId})}" th:object = "${responseAnswersDTO}"
+                method="POST">>
+                <div class="question bg-white p-3 border-bottom">
+                    <div class="d-flex flex-row justify-content-between align-items-center mcq">
+                        <h4 th:text = "${survey.surveyName}">Survey Example</h4><span th:text = "${rate} + '%'">(5 of 20)</span>
+                    </div>
+                </div>
+                <div class="question bg-white p-3 border-bottom">
+                    <div class="d-flex flex-row align-items-center question-title">
+                        <h3 class="text-danger">Q.</h3>
+                        <h5 class="mt-1 ml-2" th:text = "${surveyQuestion.question}">question example</h5>
+                    </div>
+                    <div class="ans ml-2" >
+                        <tr th:each = "answers : ${answers}">
+                            <td>
+                                <label class="radio">
+                                    <span th:if = "${surveyQuestion.multiAnswers}==${true}">
+                                    <input
+                                            th:type= "checkbox"
+                                            th:name= "${answers.Answer}"
+                                            th:text = "${answers.Answer}"
+                                            th:value = "${answers.id}"
+                                            th:field = "*{answerList}">
+                                        </span>
+                                    <span th:if = "${surveyQuestion.multiAnswers}==${false}">
+                                        <input
+                                                th:type= "radio"
+                                                th:name= "${surveyQuestion.question}"
+                                                th:text = "${answers.Answer}"
+                                                th:value = "${answers.id}"
+                                                th:field = "*{answerList}">
+                                    </span>
+                                </label>
+                        </td>
+                            </br>
+                        </tr>
+                    </div>
+                </div>
+                <div class="d-flex flex-row justify-content-between align-items-center p-3 bg-white">
+                    <button class="btn btn-primary d-flex align-items-center btn-danger"
+                            type="button">
+                        <i class="fa fa-angle-left mt-1 mr-1"></i>&nbsp;previous</button>
+                    <button class="btn btn-primary border-success align-items-center btn-success"
+                            type="submit">Next
+                        <i class="fa fa-angle-right ml-2"></i>
+                    </button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
