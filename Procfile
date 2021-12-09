@@ -1,1 +1,1 @@
-web: java -jar build/libs/survey-0.0.1.jar
+web: java -Dserver.port=$PORT $SurveyApplication -jar build/libs/*.jar
