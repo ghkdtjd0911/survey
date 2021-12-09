@@ -1,1 +1,1 @@
-web java -Dserver.port=$PORT $JAVA_OPTS -jar build/libs/survey-0.0.1-SNAPSHOT-plain.jar
+web: java $JAVA_OPTS -cp target/classes:target/dependency/* com.natsuki.survey.SurveyApplication
