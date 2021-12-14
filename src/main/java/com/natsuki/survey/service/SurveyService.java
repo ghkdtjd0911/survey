@@ -13,7 +13,7 @@ public interface SurveyService {
     void createSurvey(String surveyName,String user);
     void deleteSurvey(Long id);
 
-    void createQuestion(Long SurveyID, SurveyQuestion surveyQuestion);
+    void createQuestion(Long SurveyID, SurveyQuestion surveyQuestion, String principal);
     void modifyQuestion(Long QuestionID, QuestionDTO surveyQuestion);
     void deleteQuestion(Long id);
 
@@ -28,7 +28,7 @@ public interface SurveyService {
     Integer getSurveySize(Survey survey);
 
 
-    void createAnswer(Answer answer);
+    void createAnswer(Answer answer,String principal);
 
     List<Answer> findAnswersByQuestionId(Long id);
 
@@ -55,4 +55,12 @@ public interface SurveyService {
     SurveyResponse getSurveyResponseByResponsePersonInfo(ResponsePersonInfo responsePersonInfo);
 
     List<Survey> findByRegisteredUser(RegisteredUserDTO user);
+
+    List<SurveyResponse> getAllSurveyResponseBySurvey(Survey survey);
+
+    List<ResponseData> getAllResponseDataBySurveyId(Long id);
+
+    SurveyQuestion getSurveyQuestionById(Long qid);
+
+    List<Answer> getAllAnswers();
 }

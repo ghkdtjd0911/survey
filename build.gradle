@@ -42,7 +42,9 @@ test {
 	useJUnitPlatform()
 }
 
+
 bootJar {
 	archivesBaseName='survey'
 	archiveFileName='survey.jar'
 }
+

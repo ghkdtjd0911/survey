@@ -18,10 +18,17 @@ public class ResponseData {
     private String personId;
     private Long surveyId;
     private Long surveyQuestionId;
+    private String surveyQuestionString;
     @ManyToMany(fetch = FetchType.LAZY)
     private List<Answer> answerList;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.LAZY)
+    private SurveyQuestion question;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Survey surveyEntity;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     private SurveyResponse surveyResponse;
 
 }

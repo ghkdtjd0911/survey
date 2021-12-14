@@ -22,6 +22,9 @@
     <div class="collapse navbar-collapse" id="collapsibleNavbar">
         <ul class="navbar-nav">
             <li class="nav-item">
+                <a class="nav-link"  th:text = "${loginMember}+ '　様'">会員</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" th:href="@{/system}">アンケートリスト</a>
             </li>
             <li class="nav-item">
@@ -67,7 +70,7 @@
                 <a th:href = "@{/system/{id}/questions/{qid}/answers
                 (id=${Survey.id},qid=${surveyQuestions.id})}"
                    class = "btn btn-info">答案詳細</a>
-                <a th:href = "@{/system/{id}/questions/delete/{qid}
+                <a th:if = "${query_condition}==true" th:href = "@{/system/{id}/questions/delete/{qid}
                 (id=${Survey.id},qid=${surveyQuestions.id})}"
                    class = "btn btn-danger">質問削除</a>
             </td>

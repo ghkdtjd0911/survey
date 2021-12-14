@@ -19,15 +19,18 @@ public class Answer {
     private String Answer;
     private Long nextQid;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @NotFound(
             action = NotFoundAction.IGNORE)
     private SurveyQuestion surveyQuestion;
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Survey survey;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    private List<ResponseData> responseData;
+    @ManyToMany(mappedBy = "",fetch = FetchType.LAZY)
+    private List<SurveyResponse> surveyResponses;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private RegisteredUser registeredUser;
 
 
 }

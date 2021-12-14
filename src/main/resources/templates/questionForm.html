@@ -15,7 +15,7 @@
             <div class="border">
                 <form th:action="@{/survey/{id}/{qid}/response?personId={personId}
                 (id=${survey.id},qid=${surveyQuestion.id},personId=${personId})}" th:object = "${responseAnswersDTO}"
-                method="POST">>
+                method="POST">
                 <div class="question bg-white p-3 border-bottom">
                     <div class="d-flex flex-row justify-content-between align-items-center mcq">
                         <h4 th:text = "${survey.surveyName}">Survey Example</h4><span th:text = "${rate} + '%'">(5 of 20)</span>
@@ -57,7 +57,7 @@
                             type="button">
                         <i class="fa fa-angle-left mt-1 mr-1"></i></button>
                     <button class="btn btn-primary border-success align-items-center btn-success"
-                            type="submit">Next
+                            type="submit">次へ
                         <i class="fa fa-angle-right ml-2"></i>
                     </button>
                 </div>

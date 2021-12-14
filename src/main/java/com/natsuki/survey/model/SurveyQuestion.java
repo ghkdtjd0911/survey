@@ -20,8 +20,12 @@ public class SurveyQuestion {
     private Boolean multiAnswers;
     @OneToMany(mappedBy = "Answer")
     private List<Answer> answer;
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.MERGE)
     @JoinColumn(name = "survey_survey_questions")
     private Survey survey;
-
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
+    private RegisteredUser registeredUser;
+    @ManyToMany(mappedBy = "",fetch = FetchType.LAZY)
+    private List<SurveyResponse> surveyResponses;
 }
+

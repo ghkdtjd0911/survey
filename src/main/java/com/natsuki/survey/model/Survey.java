@@ -19,8 +19,10 @@ public class Survey {
     @OneToMany(targetEntity = SurveyQuestion.class,cascade = CascadeType.ALL)
     @JoinColumn(name = "survey_survey_questions")
     private List<SurveyQuestion>surveyQuestions;
+
     @OneToMany(mappedBy = "")
     private List<SurveyResponse> surveyResponses;
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.LAZY)
     private RegisteredUser registeredUser;
 }

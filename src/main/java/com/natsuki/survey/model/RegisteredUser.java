@@ -16,11 +16,17 @@ public class RegisteredUser {
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
-    @OneToMany(mappedBy = "", targetEntity = Survey.class)
+    @OneToMany(targetEntity = Survey.class,fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<Survey> survey;
 
+    @OneToMany(targetEntity = SurveyQuestion.class,fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private List<SurveyQuestion> surveyQuestions;
+
+    @OneToMany(targetEntity = Answer.class,fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private List<Answer> answers;
+
     @Builder
-    public RegisteredUser(String userId, String pw, String userName, Authority authority) {
+    public RegisteredUser(String userId, String pw, Authority authority) {
         this.authority = authority;
         this.pw = pw;
         this.userId = userId;

@@ -96,6 +96,7 @@ public class SurveyController {
         responseData.setPersonId(personId);
         responseData.setSurveyId(id);
         responseData.setSurveyQuestionId(qid);
+        responseData.setSurveyQuestionString(surveyService.getSurveyQuestionById(qid).getQuestion());
         responseData.setSurveyResponse(surveyService.getSurveyResponseByResponsePersonInfo(responsePersonInfo));
         List<Answer> answerList = new ArrayList<>();
         Long nextQ = -1L;

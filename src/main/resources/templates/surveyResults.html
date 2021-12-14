@@ -28,7 +28,7 @@
                 <a class="nav-link" th:href="@{/system}">アンケートリスト</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/system/logout}">ログアウト</a>
+                <a class="nav-link" th:href="@{/user/logout}">ログアウト</a>
             </li>
         </ul>
     </div>
@@ -37,40 +37,24 @@
 <div class ="container">
     <div class = "row">
         <br/>
-        <h1> 答案リスト </h1>
-    </div>
-
-    <div class = "row">
-        <div class = "col-lg-3">
-            <a th:href =  "@{/system/{id}/questions/{qid}/answers/new
-                (id=${Survey.id},qid=${surveyQuestion.id})}" class = "btn btn-primary btn-sm mb-3"> 新しい答案</a>
-            <a th:href =  "@{/system/{id}/questions
-                (id=${Survey.id})}" class = "btn btn-info btn-sm mb-3"> 質問へ</a>
-        </div>
+        <h1> アンケート結果</h1>
     </div>
     <table class = "table table-striped table-bordered">
         <thead class = "table-dark">
         <tr>
-            <th>　答案内容</th>
-            <th> 質問内容</th>
-            <th> 次質問番号 </th>
-            <th> Actions</th>
+            <th> 質問</th>
+            <th> 答案内容</th>
+            <th> 応答人数</th>
+            <th>  応答率 </th>
         </tr>
         </thead>
 
         <tbody>
-        <tr th:each = "answers: ${#lists.sort(answers, byNqid)}">
-            <td th:text = "${answers.Answer}"></td>
-            <td th:text = "${surveyQuestion.question}"></td>
-            <td th:text = "${answers.nextQid}"></td>
-            <td>
-                <a th:href = "@{/system/{id}/questions/modify/{qid}/answers/{aid}
-                (id=${Survey.id},qid=${surveyQuestion.id},aid=${answers.id})}"
-                   class = "btn btn-warning">答案修正</a>
-                <a th:if = "${query_condition}==true" th:href = "@{/system/{id}/questions/delete/{qid}/answers/{aid}
-                (id=${Survey.id},qid=${surveyQuestion.id},aid=${answers.id})}"
-                   class = "btn btn-danger">答案削除</a>
-            </td>
+        <tr th:each = "answerResultDTOS: ${#lists.sort(answerResultDTOS, byNqid)}">
+            <td th:text = "${answerResultDTOS.questionString}"></td>
+            <td th:text = "${answerResultDTOS.answerString}"></td>
+            <td th:text = "${answerResultDTOS.answerCount}"></td>
+            <td th:text = "${answerResultDTOS.percentage} +'%'"></td>
         </tr>
         </tbody>
 

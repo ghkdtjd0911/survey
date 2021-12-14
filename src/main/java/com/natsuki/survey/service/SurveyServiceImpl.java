@@ -46,6 +46,8 @@ public class SurveyServiceImpl implements SurveyService {
 
     @Override
     public void deleteSurvey(Long id) {
+        responseRepository.deleteAllBySurvey(surveyRepository.getById(id));
+        responseDataRepository.deleteAllBySurveyId(id);
         answerRepository.deleteAllBySurvey(surveyRepository.getById(id));
         surveyQuestionRepository.deleteAllBySurvey(surveyRepository.getById(id));
         surveyRepository.delete(surveyRepository.getById(id));
@@ -54,8 +56,9 @@ public class SurveyServiceImpl implements SurveyService {
     }
 
     @Override
-    public void createQuestion(Long SurveyID, SurveyQuestion surveyQuestion) {
+    public void createQuestion(Long SurveyID, SurveyQuestion surveyQuestion,String principal) {
         Survey survey = surveyRepository.getById(SurveyID);
+        surveyQuestion.setRegisteredUser(registeredUserRepository.findByUserId(principal));
         surveyQuestionRepository.save(surveyQuestion);
         surveyRepository.save(survey);
 
@@ -73,6 +76,7 @@ public class SurveyServiceImpl implements SurveyService {
 
     @Override
     public void deleteQuestion(Long id) {
+        responseDataRepository.deleteAllByQuestion(surveyQuestionRepository.getById(id));
         answerRepository.deleteAllBySurveyQuestion(surveyQuestionRepository.getById(id));
         surveyQuestionRepository.deleteById(id);
 
@@ -106,7 +110,8 @@ public class SurveyServiceImpl implements SurveyService {
 
 
     @Override
-    public void createAnswer(Answer answer) {
+    public void createAnswer(Answer answer,String principal) {
+        answer.setRegisteredUser(registeredUserRepository.findByUserId(principal));
         answerRepository.save(answer);
 
 
@@ -202,4 +207,25 @@ public class SurveyServiceImpl implements SurveyService {
 
         return  surveyRepository.findAllByRegisteredUser(registeredUser);
     }
+
+    @Override
+    public List<SurveyResponse> getAllSurveyResponseBySurvey(Survey survey) {
+        return responseRepository.findAllBySurvey(survey);
+    }
+
+    @Override
+    public List<ResponseData> getAllResponseDataBySurveyId(Long id) {
+        return responseDataRepository.findAllBySurveyId(id);
+    }
+
+    @Override
+    public SurveyQuestion getSurveyQuestionById(Long qid) {
+        return surveyQuestionRepository.getById(qid);
+    }
+
+    @Override
+    public List<Answer> getAllAnswers() {
+        return answerRepository.findAll();
+    }
+
 }

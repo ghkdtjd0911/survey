@@ -1,9 +1,6 @@
 package com.natsuki.survey.controller;
 
-import com.natsuki.survey.dto.AnswerDTO;
-import com.natsuki.survey.dto.QuestionDTO;
-import com.natsuki.survey.dto.RegisteredUserDTO;
-import com.natsuki.survey.dto.SurveyDTO;
+import com.natsuki.survey.dto.*;
 import com.natsuki.survey.model.*;
 import com.natsuki.survey.service.RegisteredUserService;
 import com.natsuki.survey.service.SurveyService;
@@ -14,8 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("/system")
@@ -63,12 +59,16 @@ public class SystemController {
     }
 
     @GetMapping("/{id}/questions")
-    public String queryQuestions(@PathVariable Long id, Model model) {
+    public String queryQuestions(@PathVariable Long id, Model model,Principal principal) {
         Survey survey = surveyService.getSurveyById(id);
+
         List<SurveyQuestion> surveyQuestions = surveyService.getSurveyQuestionsBySurvey(survey);
         model.addAttribute("surveyQuestions", surveyQuestions);
         model.addAttribute("Survey", survey);
         model.addAttribute("bySqid", Comparator.comparing(SurveyQuestion::getSurveyQuestionId));
+        Boolean query_condition = surveyService.getAllResponseDataBySurveyId(survey.getId()).size()==0;
+        model.addAttribute("query_condition",query_condition);
+        model.addAttribute("loginMember", principal.getName());
         return "questions";
     }
 
@@ -83,14 +83,14 @@ public class SystemController {
     }
 
     @PostMapping("/{id}/questions/new")
-    public String createQuestion(@PathVariable Long id, @Valid @ModelAttribute() QuestionDTO questionDTO) {
+    public String createQuestion(@PathVariable Long id, @Valid @ModelAttribute() QuestionDTO questionDTO,Principal principal) {
         SurveyQuestion surveyQuestion = new SurveyQuestion();
         String question = questionDTO.getQuestion();
         surveyQuestion.setQuestion(question);
         surveyQuestion.setSurveyQuestionId(questionDTO.getSurveyQuestionId());
         surveyQuestion.setSurvey(surveyService.getSurveyById(id));
         surveyQuestion.setMultiAnswers(questionDTO.getMultiAnswers());
-        surveyService.createQuestion(id, surveyQuestion);
+        surveyService.createQuestion(id, surveyQuestion,principal.getName());
         return "redirect:/system/{id}/questions";
     }
 
@@ -137,7 +137,7 @@ public class SystemController {
     @PostMapping("/{id}/questions/{qid}/answers/new")
     public String createAnswers(@PathVariable Long id,
                                 @PathVariable Long qid,
-                                @Valid @ModelAttribute() AnswerDTO answerDTO) {
+                                @Valid @ModelAttribute() AnswerDTO answerDTO,Principal principal) {
         Answer answer = new Answer();
         String answerDetail = answerDTO.getAnswer();
         Long answerNextQid = answerDTO.getNextQid();
@@ -145,21 +145,24 @@ public class SystemController {
         answer.setNextQid(answerNextQid);
         answer.setSurveyQuestion(surveyService.findById(qid));
         answer.setSurvey(surveyService.getSurveyById(id));
-        surveyService.createAnswer(answer);
+        surveyService.createAnswer(answer,principal.getName());
         return "redirect:/system/{id}/questions/{qid}/answers";
     }
 
     @GetMapping("/{id}/questions/{qid}/answers")
     public String queryAnswers(@PathVariable Long id,
                                @PathVariable Long qid,
-                               Model model) {
+                               Model model,Principal principal) {
         Survey Survey = surveyService.getSurveyById(id);
         model.addAttribute("Survey", Survey);
         SurveyQuestion surveyQuestion = surveyService.findById(qid);
         model.addAttribute("surveyQuestion", surveyQuestion);
         List<Answer> answers = surveyService.findAnswersByQuestionId(qid);
         model.addAttribute("answers", answers);
+        Boolean query_condition = surveyService.getAllResponseDataBySurveyId(Survey.getId()).size()==0;
+        model.addAttribute("query_condition",query_condition);
         model.addAttribute("byNqid", Comparator.comparing(Answer::getNextQid));
+        model.addAttribute("loginMember", principal.getName());
 
         return "answers";
     }
@@ -193,6 +196,44 @@ public class SystemController {
                                 @Valid @ModelAttribute() AnswerDTO answerDTO) {
         surveyService.modifyAnswer(aid, answerDTO);
         return "redirect:/system/{id}/questions/{qid}/answers";
+    }
+
+    @GetMapping("/results/{id}")
+    public String surveyResults(@PathVariable Long id,
+                                Model model,Principal principal) {
+        Survey survey = surveyService.getSurveyById(id);
+        List<SurveyResponse> surveyResponses = surveyService.getAllSurveyResponseBySurvey(survey);
+        List<ResponseData> responseData = surveyService.getAllResponseDataBySurveyId(survey.getId());
+        List<Answer> answerList = surveyService.getAllAnswers();
+        HashSet<AnswerResultDTO> answerResultDTOS = new HashSet<>();
+        for (int k = 0; k < answerList.size(); k++) {
+            if(answerList.get(k).getSurvey().equals(survey)){
+            AnswerResultDTO answerResultDTO = new AnswerResultDTO();
+            answerResultDTO.setAnswerNum(answerList.get(k).getId());
+            answerResultDTO.setAnswerString(answerList.get(k).getAnswer());
+            for (int j = 0; j < responseData.size(); j++) {
+                if (responseData.get(j).getSurveyQuestionId().equals(answerList.get(k).getSurveyQuestion().getId())) {
+                    if(responseData.get(j).getAnswerList().contains(answerList.get(k))){
+                        answerResultDTO.setAnswerCount(answerResultDTO.getAnswerCount() + 1);
+                    }
+                        answerResultDTO.setQuestionID(responseData.get(j).getSurveyQuestionId());
+                        answerResultDTO.setQuestionString(responseData.get(j).getSurveyQuestionString());
+                        double original = answerResultDTO.getAnswerCount().doubleValue() / surveyResponses.size();
+                        double rounded = Math.round(original * 100);
+                        answerResultDTO.setPercentage(rounded);
+                    }
+                }
+            answerResultDTOS.add(answerResultDTO);
+        }
+            }
+
+
+
+        model.addAttribute("answerResultDTOS", answerResultDTOS);
+        model.addAttribute("loginMember", principal.getName());
+        model.addAttribute("byNqid", Comparator.comparing(AnswerResultDTO::getQuestionID));
+
+        return "surveyResults";
     }
 
 }

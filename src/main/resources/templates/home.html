@@ -61,7 +61,7 @@
             <td th:text = "${Survey.questionsSize}"></td>
             <td th:text = "${Survey.responseSize}"></td>
             <td>
-                <a th:href = "@{/system/new}"
+                <a th:href = "@{/system/results/{id}(id=${Survey.id})}"
                    class = "btn btn-primary">結果確認</a>
                 <a th:href = "@{/system/{id}/questions(id=${Survey.id})}"
                    class = "btn btn-info">質問確認</a>
