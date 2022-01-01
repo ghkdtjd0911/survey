@@ -47,21 +47,14 @@
 
                     <div class="ans ml-2" >
                         <h5 class="mt-1 ml-2">年齢</h5>
-                        <select>
-                            <option th:value = "15"
-                                    th:field ="*{age}">10代</option>
-                            <option th:value = "25"
-                                    th:field ="*{age}">20代</option>
-                            <option th:value = "35"
-                                    th:field ="*{age}">30代</option>
-                            <option th:value = "45"
-                                    th:field ="*{age}">40代</option>
-                            <option th:value = "55"
-                                    th:field ="*{age}">50代</option>
-                            <option th:value = "65"
-                                    th:field ="*{age}">60代</option>
-                            <option th:value = "75"
-                                    th:field ="*{age}">70代 以上</option>
+                        <select th:field ="*{age}">
+                            <option th:value = "15">10代</option>
+                            <option th:value = "25">20代</option>
+                            <option th:value = "35">30代</option>
+                            <option th:value = "45">40代</option>
+                            <option th:value = "55">50代</option>
+                            <option th:value = "65">60代</option>
+                            <option th:value = "75">70代 以上</option>
                         </select>
                     </div>
 

@@ -10,8 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Transactional
@@ -226,6 +225,49 @@ public class SurveyServiceImpl implements SurveyService {
     @Override
     public List<Answer> getAllAnswers() {
         return answerRepository.findAll();
+    }
+
+    @Override
+    public List<ResponsePersonInfo> findResponsePersonInfoByDataId(Long dataId) {
+        List<SurveyResponse>surveyResponses = new ArrayList<>();
+        List<ResponsePersonInfo>responsePersonInfos = new ArrayList<>();
+        if (surveyRepository.existsById(dataId)) {
+            surveyResponses = responseRepository.findAllBySurvey(surveyRepository.getById(dataId));
+
+        }
+        else if(answerRepository.existsById(dataId)){
+            List<ResponseData>responseDataList = responseDataRepository.findAllByAnswerList_Id(dataId);
+            HashSet<SurveyResponse> set = new HashSet();
+            for (int i = 0; i < responseDataList.size(); i++) {
+                set.add(responseRepository.findByResponseData(responseDataList.get(i)));
+            }
+            Iterator<SurveyResponse> ir = set.iterator();
+            while (ir.hasNext()) {
+                surveyResponses.add(ir.next());
+            }
+        }
+        for (int i = 0; i < surveyResponses.size(); i++) {
+            ResponsePersonInfo responsePersonInfo = responsePersonInfoRepository.findBySurveyResponse(surveyResponses.get(i));
+            responsePersonInfos.add(responsePersonInfo);
+
+        }
+        return responsePersonInfos;
+    }
+
+    @Override
+    public ResponsePersonInfo getResponsePersonInfoById(Long id) {
+        return responsePersonInfoRepository.getById(id);
+    }
+
+    @Override
+    public List<ResponseData> getAllResponseDataBySurveyResponse(SurveyResponse surveyResponse) {
+        List<ResponseData> responseDataList = responseDataRepository.findAllBySurveyResponse(surveyResponse);
+        return responseDataList;
+    }
+
+    @Override
+    public void deleteResponseUserById(Long responseUserId) {
+        responsePersonInfoRepository.deleteById(responseUserId);
     }
 
 }

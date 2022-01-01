@@ -17,7 +17,7 @@ public class ResponsePersonDTO {
 
     private String personId;
     private String pw;
-    private Integer age;
+    private String age;
     @Enumerated(EnumType.STRING)
     private Sex sex;
 }

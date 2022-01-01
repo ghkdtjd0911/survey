@@ -63,4 +63,12 @@ public interface SurveyService {
     SurveyQuestion getSurveyQuestionById(Long qid);
 
     List<Answer> getAllAnswers();
+
+    List<ResponsePersonInfo> findResponsePersonInfoByDataId(Long id);
+
+    ResponsePersonInfo getResponsePersonInfoById(Long id);
+
+    List<ResponseData> getAllResponseDataBySurveyResponse(SurveyResponse surveyResponse);
+
+    void deleteResponseUserById(Long responseUserId);
 }

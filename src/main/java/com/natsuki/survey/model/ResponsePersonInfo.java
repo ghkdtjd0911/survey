@@ -25,7 +25,7 @@ public class ResponsePersonInfo {
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.REMOVE)
     SurveyResponse surveyResponse;
 
 

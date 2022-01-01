@@ -19,7 +19,7 @@ public class SurveyResponse {
     private Date createAt;
     @OneToOne(mappedBy = "",cascade = CascadeType.REMOVE)
     private ResponsePersonInfo responsePersonInfo;
-    @OneToMany(mappedBy = "")
+    @OneToMany(mappedBy = "",cascade = CascadeType.REMOVE)
     private List<ResponseData> responseData;
     @ManyToOne(fetch = FetchType.LAZY,targetEntity = Survey.class)
     private Survey survey;

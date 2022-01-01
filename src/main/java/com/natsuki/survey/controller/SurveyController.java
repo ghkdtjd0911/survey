@@ -48,7 +48,7 @@ public class SurveyController {
         }
         ResponsePersonInfo responsePersonInfo = new ResponsePersonInfo();
         responsePersonInfo.setPersonId(personId);
-        responsePersonInfo.setAge(responsePersonDTO.getAge());
+        responsePersonInfo.setAge(Integer.parseInt(responsePersonDTO.getAge()));
         responsePersonInfo.setPw(responsePersonDTO.getPw());
         responsePersonInfo.setSex(responsePersonDTO.getSex());
         responsePersonInfo.setAuthority(Authority.ROLE_USER);

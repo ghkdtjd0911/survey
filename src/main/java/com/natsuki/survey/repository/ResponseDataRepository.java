@@ -1,9 +1,6 @@
 package com.natsuki.survey.repository;
 
-import com.natsuki.survey.model.Answer;
-import com.natsuki.survey.model.ResponseData;
-import com.natsuki.survey.model.Survey;
-import com.natsuki.survey.model.SurveyQuestion;
+import com.natsuki.survey.model.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -15,4 +12,7 @@ public interface ResponseDataRepository extends JpaRepository<ResponseData,Long>
 
     void deleteAllByQuestion(SurveyQuestion byId);
 
+    List<ResponseData> findAllBySurveyResponse(SurveyResponse surveyResponse);
+
+    List<ResponseData> findAllByAnswerList_Id(Long dataId);
 }

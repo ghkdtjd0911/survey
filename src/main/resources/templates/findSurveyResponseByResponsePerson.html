@@ -28,9 +28,6 @@
                 <a class="nav-link" th:href="@{/system}">アンケートリスト</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href="@{/system/results/responseperson/{id}(id=${surveyId})}">アンケート全応答者確認</a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link" th:href="@{/user/logout}">ログアウト</a>
             </li>
         </ul>
@@ -38,18 +35,13 @@
 </nav>
 
 <div class ="container">
-    <div class = "row">
-        <br/>
-        <h1> アンケート結果</h1>
-    </div>
+    <h6 th:text = " '答弁日時 : '+${surveyResponse.createAt}"></h6><br>
+    <h6 th:text = " '答弁者 : '+${name}"></h6>
     <table class = "table table-striped table-bordered">
         <thead class = "table-dark">
         <tr>
             <th> 質問</th>
             <th> 答案内容</th>
-            <th> 応答人数</th>
-            <th>  応答率 </th>
-            <th> Actions </th>
         </tr>
         </thead>
 
@@ -57,12 +49,7 @@
         <tr th:each = "answerResultDTOS: ${#lists.sort(answerResultDTOS, byNqid)}">
             <td th:text = "${answerResultDTOS.questionString}"></td>
             <td th:text = "${answerResultDTOS.answerString}"></td>
-            <td th:text = "${answerResultDTOS.answerCount}"></td>
-            <td th:text = "${answerResultDTOS.percentage} +'%'"></td>
-            <td>
-                <a th:href = "@{/system/results/responseperson/{aid}(aid=${answerResultDTOS.answerNum})}"
-                   class = "btn btn-primary">応答者確認</a>
-            </td>
+
         </tr>
         </tbody>
 

@@ -232,8 +232,59 @@ public class SystemController {
         model.addAttribute("answerResultDTOS", answerResultDTOS);
         model.addAttribute("loginMember", principal.getName());
         model.addAttribute("byNqid", Comparator.comparing(AnswerResultDTO::getQuestionID));
+        model.addAttribute("surveyId", id);
 
         return "surveyResults";
+    }
+
+    @GetMapping("/results/responseperson/{id}")
+    public String findResponsePerson(Principal principal,
+                                     @PathVariable("id")Long id,
+                                     Model model){
+        List<ResponsePersonInfo> responsePersonInfoList = surveyService.findResponsePersonInfoByDataId(id);
+
+        model.addAttribute("responsePersonInfoList",responsePersonInfoList);
+        model.addAttribute("loginMember", principal.getName());
+        model.addAttribute("surveyId", id);
+        return "findResponsePerson";
+    }
+
+    @GetMapping("/results/responseperson/details/{id}")
+    public String findSurveyResponseByResponsePerson(Principal principal,
+                                     @PathVariable("id")Long id,
+                                     Model model){
+        ResponsePersonInfo responsePersonInfo = surveyService.getResponsePersonInfoById(id);
+        SurveyResponse surveyResponse = surveyService.getSurveyResponseByResponsePersonInfo(responsePersonInfo);
+        List<ResponseData> responseDataList = surveyService.getAllResponseDataBySurveyResponse(surveyResponse);
+        HashSet<AnswerResultDTO> answerResultDTOS = new HashSet<>();
+        for (int i = 0; i < responseDataList.size(); i++) {
+            Long question = responseDataList.get(i).getSurveyQuestionId();
+            String question1 = surveyService.getSurveyQuestionById(question).getQuestion();
+            for (int j = 0; j < responseDataList.get(i).getAnswerList().size(); j++) {
+                AnswerResultDTO answerResultDTO = new AnswerResultDTO();
+                Answer answer = responseDataList.get(i).getAnswerList().get(j);
+                answerResultDTO.setQuestionID(responseDataList.get(i).getSurveyQuestionId());
+                answerResultDTO.setAnswerString(answer.getAnswer());
+                answerResultDTO.setQuestionString(question1);
+                answerResultDTOS.add(answerResultDTO);
+            }
+        }
+
+        model.addAttribute("surveyResponse",surveyResponse);
+        model.addAttribute("name", responsePersonInfo.getPersonId());
+        model.addAttribute("loginMember", principal.getName());
+        model.addAttribute("answerResultDTOS", answerResultDTOS);
+        model.addAttribute("byNqid", Comparator.comparing(AnswerResultDTO::getQuestionID));
+        return "findSurveyResponseByResponsePerson";
+    }
+
+    @GetMapping("/results/responseperson/delete/{surveyId}/{id}")
+    public String deleteResponseUser(@PathVariable("surveyId")Long surveyId,
+                                     @PathVariable("id")Long responseUserId){
+        surveyService.deleteResponseUserById(responseUserId);
+
+        return "redirect:/system/results/responseperson/" + surveyId;
+
     }
 
 }
