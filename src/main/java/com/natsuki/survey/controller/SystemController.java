@@ -52,6 +52,16 @@ public class SystemController {
         return "redirect:/system";
     }
 
+    @GetMapping("/{id}/switch")
+    public String switching(@PathVariable("id")Long id, Principal principal){
+        if(surveyService.getSurveyById(id).getRegisteredUser().getUserId().equals(principal.getName())){
+            surveyService.switchSurveyStatus(id);
+        }
+
+
+        return "redirect:/system";
+    }
+
     @GetMapping("/delete/{id}")
     public String deleteSurvey(@PathVariable Long id) {
         surveyService.deleteSurvey(id);
@@ -286,5 +296,7 @@ public class SystemController {
         return "redirect:/system/results/responseperson/" + surveyId;
 
     }
+
+
 
 }

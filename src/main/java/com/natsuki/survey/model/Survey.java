@@ -16,6 +16,7 @@ public class Survey {
     private String surveyName;
     private Integer questionsSize;
     private Integer responseSize;
+    private Boolean available;
     @OneToMany(targetEntity = SurveyQuestion.class,cascade = CascadeType.ALL)
     @JoinColumn(name = "survey_survey_questions")
     private List<SurveyQuestion>surveyQuestions;

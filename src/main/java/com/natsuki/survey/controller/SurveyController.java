@@ -31,10 +31,15 @@ public class SurveyController {
             @PathVariable("id") Long id,
             Model model) {
         Survey survey = surveyService.getSurveyById(id);
-        model.addAttribute("survey", survey);
-        ResponsePersonInfo responsePersonInfo = new ResponsePersonInfo();
-        model.addAttribute("responsePersonInfo", responsePersonInfo);
-        return "registerForm";
+        if(survey.getAvailable()==true){
+            model.addAttribute("survey", survey);
+            ResponsePersonInfo responsePersonInfo = new ResponsePersonInfo();
+            model.addAttribute("responsePersonInfo", responsePersonInfo);
+            return "registerForm";
+        }
+       else{
+            return "error";
+        }
     }
 
     @PostMapping("/{id}")
@@ -43,15 +48,37 @@ public class SurveyController {
         SurveyQuestion surveyQuestion = surveyService.findBySurveyQuestionId(1L, id);
         Long nextQ = surveyQuestion.getId();
         String personId = responsePersonDTO.getPersonId();
-        if(surveyService.getResponsePersonInfoByPersonId(personId)!=null){
-            return "redirect:/survey/end";
+        Survey survey = surveyService.getSurveyById(id);
+        try{
+            if(surveyService.getResponsePersonInfoByPersonId(personId,id).getSurvey().equals(survey)){
+                return "redirect:/survey/end";
+            }
+
+        }catch (NullPointerException e){
+            e.printStackTrace();
+            ResponsePersonInfo responsePersonInfo = new ResponsePersonInfo();
+            responsePersonInfo.setPersonId(personId);
+            responsePersonInfo.setAge(Integer.parseInt(responsePersonDTO.getAge()));
+            responsePersonInfo.setPw(responsePersonDTO.getPw());
+            responsePersonInfo.setSex(responsePersonDTO.getSex());
+            responsePersonInfo.setAuthority(Authority.ROLE_USER);
+            responsePersonInfo.setSurvey(survey);
+            surveyService.saveResponsePersonInfo(responsePersonInfo);
+            surveyService.saveSurveyResponse(id,responsePersonInfo,new ArrayList<>());
+            responsePersonInfo.setSurveyResponse(surveyService.getSurveyResponseByResponsePersonInfo(responsePersonInfo));
+            surveyService.saveResponsePersonInfo(responsePersonInfo);
+            tempMap.put(personId, new ArrayList<>());
+            responsePersonInfoHashMap.put(personId,responsePersonInfo);
+            return "redirect:/survey/"+id+"/"+nextQ+"?personId=" + responsePersonDTO.getPersonId();
         }
+
         ResponsePersonInfo responsePersonInfo = new ResponsePersonInfo();
         responsePersonInfo.setPersonId(personId);
         responsePersonInfo.setAge(Integer.parseInt(responsePersonDTO.getAge()));
         responsePersonInfo.setPw(responsePersonDTO.getPw());
         responsePersonInfo.setSex(responsePersonDTO.getSex());
         responsePersonInfo.setAuthority(Authority.ROLE_USER);
+        responsePersonInfo.setSurvey(survey);
         surveyService.saveResponsePersonInfo(responsePersonInfo);
         surveyService.saveSurveyResponse(id,responsePersonInfo,new ArrayList<>());
         responsePersonInfo.setSurveyResponse(surveyService.getSurveyResponseByResponsePersonInfo(responsePersonInfo));
@@ -91,7 +118,7 @@ public class SurveyController {
                                  @ModelAttribute("responseAnswersDTO")@Valid ResponseAnswersDTO responseAnswersDTO
                                  ) {
         ArrayList list = tempMap.get(personId);
-        ResponsePersonInfo responsePersonInfo = surveyService.getResponsePersonInfoByPersonId(personId);
+        ResponsePersonInfo responsePersonInfo = surveyService.getResponsePersonInfoByPersonId(personId,id);
         ResponseData responseData = new ResponseData();
         responseData.setPersonId(personId);
         responseData.setSurveyId(id);

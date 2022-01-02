@@ -65,6 +65,12 @@
                    class = "btn btn-primary">結果確認</a>
                 <a th:href = "@{/system/{id}/questions(id=${Survey.id})}"
                    class = "btn btn-info">質問確認</a>
+                <a th:if = "${Survey.available}==true" th:href = "@{/system/{id}/switch
+                (id=${Survey.id})}"
+                   class = "btn btn-danger">TURN OFF</a>
+                <a th:if = "${Survey.available}==false" th:href = "@{/system/{id}/switch
+                (id=${Survey.id})}"
+                   class = "btn btn-danger">TURN ON</a>
                 <a th:href = "@{/system/delete/{id}(id=${Survey.id})}"
                    class = "btn btn-danger">アンケート削除</a>
 

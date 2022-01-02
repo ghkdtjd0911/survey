@@ -5,6 +5,8 @@ import com.natsuki.survey.model.Survey;
 import com.natsuki.survey.model.SurveyResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface ResponsePersonInfoRepository extends JpaRepository<ResponsePersonInfo,String> {
 
     boolean existsById(String id);
@@ -16,4 +18,6 @@ public interface ResponsePersonInfoRepository extends JpaRepository<ResponsePers
     ResponsePersonInfo findBySurveyResponse(SurveyResponse surveyResponse);
 
     void deleteById(Long responseUserId);
+
+    List<ResponsePersonInfo> findAllByPersonId(String personId);
 }

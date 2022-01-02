@@ -50,7 +50,7 @@ public interface SurveyService {
 
     void saveResponseData(ResponseData responseData);
 
-    ResponsePersonInfo getResponsePersonInfoByPersonId(String personId);
+    ResponsePersonInfo getResponsePersonInfoByPersonId(String personId,Long id);
 
     SurveyResponse getSurveyResponseByResponsePersonInfo(ResponsePersonInfo responsePersonInfo);
 
@@ -71,4 +71,6 @@ public interface SurveyService {
     List<ResponseData> getAllResponseDataBySurveyResponse(SurveyResponse surveyResponse);
 
     void deleteResponseUserById(Long responseUserId);
+
+    void switchSurveyStatus(Long id);
 }

@@ -28,5 +28,8 @@ public class ResponsePersonInfo {
     @OneToOne(cascade = CascadeType.REMOVE)
     SurveyResponse surveyResponse;
 
+    @OneToOne
+    private Survey survey;
+
 
 }

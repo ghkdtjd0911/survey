@@ -9,6 +9,7 @@ import com.natsuki.survey.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.NonUniqueResultException;
 import javax.transaction.Transactional;
 import java.util.*;
 
@@ -36,6 +37,7 @@ public class SurveyServiceImpl implements SurveyService {
         Survey survey = new Survey();
         RegisteredUser registeredUser = registeredUserRepository.findByUserId(user);
         survey.setSurveyName(name);
+        survey.setAvailable(true);
         survey.setRegisteredUser(registeredUser);
         survey.setQuestionsSize(0);
         survey.setResponseSize(0);
@@ -191,8 +193,17 @@ public class SurveyServiceImpl implements SurveyService {
     }
 
     @Override
-    public ResponsePersonInfo getResponsePersonInfoByPersonId(String personId) {
-        return responsePersonInfoRepository.getByPersonId(personId);
+    public ResponsePersonInfo getResponsePersonInfoByPersonId(String personId,Long id) {
+        ResponsePersonInfo responsePersonInfo = null;
+            List<ResponsePersonInfo> list = responsePersonInfoRepository.findAllByPersonId(personId);
+            Survey survey = surveyRepository.getById(id);
+            for (int i = 0; i < list.size(); i++) {
+                if(list.get(i).getSurvey().equals(survey)){
+                    responsePersonInfo = list.get(i);
+                    break;
+                }
+            }
+        return responsePersonInfo;
     }
 
     @Override
@@ -268,6 +279,17 @@ public class SurveyServiceImpl implements SurveyService {
     @Override
     public void deleteResponseUserById(Long responseUserId) {
         responsePersonInfoRepository.deleteById(responseUserId);
+    }
+
+    @Override
+    public void switchSurveyStatus(Long id) {
+        Survey survey = surveyRepository.getById(id);
+        if(survey.getAvailable()==true){
+            survey.setAvailable(false);
+        }else{
+            survey.setAvailable(true);
+        }
+
     }
 
 }
