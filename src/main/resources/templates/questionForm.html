@@ -27,7 +27,7 @@
                         <h5 class="mt-1 ml-2" th:text = "${surveyQuestion.question}">question example</h5>
                     </div>
                     <div class="ans ml-2" >
-                        <tr th:each = "answers : ${answers}">
+                        <tr th:each = "answers : ${#lists.sort(answers, byNqid)}">
                             <td>
                                 <label class="radio">
                                     <span th:if = "${surveyQuestion.multiAnswers}==${true}">

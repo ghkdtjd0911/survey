@@ -106,6 +106,7 @@ public class SurveyController {
             model.addAttribute("rate", rate);
             model.addAttribute("personId", personId);
             model.addAttribute("responseAnswersDTO", responseAnswersDTO);
+            model.addAttribute("byNqid", Comparator.comparing(Answer::getId));
 
         }
         return "questionForm";
